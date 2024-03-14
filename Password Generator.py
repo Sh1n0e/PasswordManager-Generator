@@ -108,3 +108,24 @@ def add_pwd(website, password):
         json.dump(data, file, indent=4)
 
 
+# Retrieving saved passwords
+def get_pass(website):
+    #check if json exists
+    if not os.path.exists('passwords.json'):
+        return None
+    #load existing json
+    try:
+        with open('passwords.json', 'r') as file:
+            data = json.load(file)
+    except json.JSONDecodeError:
+        data = []
+
+    #loop through all websites to see if required one exists
+    for entry in data:
+        if entry['website'] == website:
+            #decrypt and return password
+            decrypted = decrypt(cipher, entry['password'])
+            return decrypted
+    return None
+
+
